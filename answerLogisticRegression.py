@@ -2,8 +2,8 @@ import numpy as np
 
 # 超参数
 # TODO: You can change the hyperparameters here
-"""lr = 1.5e-2  # 学习率
-wd = 1e-2  # l2正则化项系数"""
+lr = 6e-2  # 学习率
+wd = 2e-2  # l2正则化项系数
 
 
 def predict(X, weight, bias):
@@ -22,7 +22,7 @@ def sigmoid(x):
     return 1 / (np.exp(-x) + 1)
 
 
-def step(X, weight, bias, Y, lr, wd):
+def step(X, weight, bias, Y):
     """
     单步训练, 进行一次forward、backward和参数更新
     @param X: (n, d) 每行是一个训练样本。 n: 样本数量， d: 样本的维度
