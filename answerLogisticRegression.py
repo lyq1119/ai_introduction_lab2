@@ -4,6 +4,7 @@ import numpy as np
 # TODO: You can change the hyperparameters here
 lr = 6e-2  # 学习率
 wd = 2e-2  # l2正则化项系数
+eps = 1e-8
 
 
 def predict(X, weight, bias):
@@ -40,11 +41,14 @@ def step(X, weight, bias, Y):
         haty = predict(X, weight, bias)
         return haty
     
-    def backward(haty,weight,bias,Y):
-        loss = - np.mean(np.log(sigmoid(haty * Y))) + 0.5 * wd * np.sum(weight ** 2)
+    def backward(haty, weight, bias, Y):
+        z = haty * Y
+        loss = np.mean(np.where(z > -3, -np.log(sigmoid(z) + eps), -z + np.log(1 + np.exp(z)))) + 0.5 * wd * np.sum(weight ** 2)
 
-        dweight = np.mean(sigmoid(-haty * Y)[:, None] * (-X) * Y[:, None], axis=0) + wd * weight
-        dbias = np.mean(sigmoid(-haty * Y) * Y)
+        threshold = 80
+        t = np.where(z < threshold, sigmoid(-haty * Y), sigmoid(-threshold))
+        dweight = np.mean(t[:, np.newaxis] * (-X) * Y[:, np.newaxis], axis=0) + wd * weight
+        dbias = np.mean(t * (-Y))
 
         weight = weight - dweight * lr
         bias = bias - dbias * lr
