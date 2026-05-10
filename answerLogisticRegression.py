@@ -2,8 +2,8 @@ import numpy as np
 
 # 超参数
 # TODO: You can change the hyperparameters here
-lr = 6e-2  # 学习率
-wd = 2e-2  # l2正则化项系数
+lr = 6.1e-2  # 学习率
+wd = 5e-2  # l2正则化项系数
 eps = 1e-8
 
 
@@ -43,7 +43,7 @@ def step(X, weight, bias, Y):
     
     def backward(haty, weight, bias, Y):
         z = haty * Y
-        loss = np.mean(np.where(z > -3, -np.log(sigmoid(z) + eps), -z + np.log(1 + np.exp(z)))) + 0.5 * wd * np.sum(weight ** 2)
+        loss = np.mean(np.where(z > 10, -z, np.where(z > -5, -np.log(sigmoid(z) + eps), -z + np.log(1 + np.exp(z))))) + 0.5 * wd * np.sum(weight ** 2)
 
         threshold = 80
         t = np.where(z < threshold, sigmoid(-haty * Y), sigmoid(-threshold))
